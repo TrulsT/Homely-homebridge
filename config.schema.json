@@ -1,0 +1,50 @@
+{
+  "pluginAlias": "Homely",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "username": { "type": "string", "title": "Homely username (email)", "required": true },
+      "password": { "type": "string", "title": "Homely password", "required": true },
+      "locationId": { "type": "string", "title": "Location ID (empty = first found)" },
+      "baseUrl": {
+        "type": "string",
+        "title": "API base URL",
+        "default": "https://sdk.iotiliti.cloud/homely"
+      },
+      "wsUrl": {
+        "type": "string",
+        "title": "WebSocket host (no scheme)",
+        "default": "//sdk.iotiliti.cloud"
+      },
+      "expose": {
+        "type": "object",
+        "title": "Accessories to expose",
+        "properties": {
+          "yaleDoorman": { "type": "boolean", "title": "Yale Doorman (lock status)", "default": true },
+          "securitySystem": { "type": "boolean", "title": "Security system", "default": true },
+          "motion": { "type": "boolean", "title": "Motion sensors", "default": true },
+          "contacts": { "type": "boolean", "title": "Contact sensors (door/window)", "default": true },
+          "flood": { "type": "boolean", "title": "Water leak sensors", "default": true },
+          "temperature": { "type": "boolean", "title": "Temperature sensors", "default": true },
+          "thermostat": { "type": "boolean", "title": "Thermostats (read)", "default": false },
+          "han": { "type": "boolean", "title": "HAN / power meter", "default": false }
+        }
+      },
+      "includeModels": {
+        "type": "array",
+        "title": "Only include models (exact modelName match)",
+        "items": { "type": "string" }
+      },
+      "excludeModels": {
+        "type": "array",
+        "title": "Exclude models",
+        "items": { "type": "string" }
+      },
+      "pollInterval": { "type": "integer", "title": "Fallback poll interval (sec)", "default": 60 },
+      "logVerbose": { "type": "boolean", "title": "Verbose logging", "default": false },
+      "allowWrites": { "type": "boolean", "title": "Allow writes (if supported by API)", "default": false }
+    }
+  }
+}

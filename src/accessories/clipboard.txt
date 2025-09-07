@@ -1,0 +1,65 @@
+// src/accessories/securitySystem.js
+class SecuritySystem {
+  constructor(platform, home) {
+    this.platform = platform;
+    this.api = platform.api;
+    this.log = platform.log;
+    this.name = `Homely Alarm (${home.name || home.locationId})`;
+
+    const { Service, Characteristic, Categories } = this.api.hap;
+    this.platformAccessory = new this.api.platformAccessory(
+      this.name,
+      this.api.hap.uuid.generate(`homely:sec:${home.locationId}`),
+      Categories.SECURITY_SYSTEM
+    );
+    this.service = this.platformAccessory.getService(Service.SecuritySystem)
+      || this.platformAccessory.addService(Service.SecuritySystem, this.name);
+
+    this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
+      .onSet(async () => {
+        if (!this.platform.allowWrites) {
+          throw new Error('Arm/disarm støttes ikke (read-only) i dokumentert API.');
+        }
+      });
+
+    this.updateFrom(home);
+  }
+
+  mapState(s) {
+    const C = this.api.hap.Characteristic.SecuritySystemCurrentState;
+    switch ((s || '').toUpperCase()) {
+      case 'DISARMED': return C.DISARMED;
+      case 'ARMED_AWAY':
+      case 'ARMED_PARTLY':
+      case 'ARMED_NIGHT':
+        return C.AWAY_ARM; // nærmeste
+      case 'BREACHED':
+      case 'ALARM_PENDING':
+      case 'ALARM_STAY_PENDING':
+      case 'ARMED_NIGHT_PENDING':
+      case 'ARMED_AWAY_PENDING':
+        return C.ALARM_TRIGGERED;
+      default:
+        return C.DISARMED;
+    }
+  }
+
+  updateFrom(home) {
+    const { Characteristic } = this.api.hap;
+    const cur = this.mapState(home.alarmState);
+    this.service.updateCharacteristic(Characteristic.SecuritySystemCurrentState, cur);
+    this.service.updateCharacteristic(Characteristic.SecuritySystemTargetState,
+      cur === Characteristic.SecuritySystemCurrentState.DISARMED
+        ? Characteristic.SecuritySystemTargetState.DISARM
+        : Characteristic.SecuritySystemTargetState.AWAY_ARM
+    );
+  }
+
+  updateFromEvent(payload) {
+    if (payload?.locationId) {
+      this.updateFrom({ alarmState: payload.alarmState || this.lastState });
+    }
+  }
+}
+
+module.exports = SecuritySystem;

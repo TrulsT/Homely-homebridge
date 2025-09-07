@@ -1,0 +1,17 @@
+{
+  "name": "homebridge-homely",
+  "version": "0.1.0",
+  "description": "Homebridge plugin for Homely / Onesti SDK -- Yale Doorman, alarm, and optional sensors in Apple HomeKit.",
+  "main": "src/index.js",
+  "keywords": ["homebridge-plugin", "homely", "onesti", "yale", "doorman", "alarm"],
+  "engines": { "node": ">=18", "homebridge": ">=1.6.0" },
+  "scripts": {
+    "build": "echo \"no build step\"",
+    "lint": "echo \"no lint step\"",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.7.4",
+    "socket.io-client": "^4.7.5"
+  }
+}

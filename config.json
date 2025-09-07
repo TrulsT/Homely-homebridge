@@ -1,0 +1,34 @@
+{
+  "bridge": {
+    "name": "Homebridge",
+    "username": "CC:22:3D:E3:CE:30",
+    "port": 51826,
+    "pin": "031-45-154"
+  },
+  "accessories": [],
+  "platforms": [
+    {
+      "platform": "Homely",
+      "username": "you@example.com",
+      "password": "your-password",
+      "locationId": "",
+      "baseUrl": "https://sdk.iotiliti.cloud/homely",
+      "wsUrl": "//sdk.iotiliti.cloud",
+      "expose": {
+        "yaleDoorman": true,
+        "securitySystem": true,
+        "motion": true,
+        "contacts": true,
+        "flood": true,
+        "temperature": true,
+        "thermostat": false,
+        "han": false
+      },
+      "includeModels": [],
+      "excludeModels": [],
+      "pollInterval": 60,
+      "logVerbose": false,
+      "allowWrites": false
+    }
+  ]
+}
